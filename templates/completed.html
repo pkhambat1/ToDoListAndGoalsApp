@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block main %}
+
+
+    <h1 class="display-5">Completed tasks!</h2>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <table class="table">
+        <thead align="left" class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+
+
+        <tbody align="left">
+            {% if completed %}
+                {% for reminder in completed | reverse %}
+                    <tr class="strikeout">
+                        <td>{{ reminder.name }}</td>
+                        <td>{{ reminder.details }}</td>
+                        <td>{{ reminder.datetime }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" align="center">You have no completed items</td>
+                </tr>
+            {% endif %}
+        </tbody>
+
+    </table>
+{% endblock %}

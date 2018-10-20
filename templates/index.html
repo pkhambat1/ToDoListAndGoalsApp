@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block main %}
+
+
+    <!-- app's own JavaScript -->
+    <script src="/static/scripts.js"></script>
+
+    <h1 class="display-2">Welcome, {{ name }} </h2>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <form action="/new">
+        <button type="submit" id="new_reminder" class="btn btn-primary btn-md center-block" Style="width: 150px; Height: 50px">New ToDo</button>
+    </form>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <table class="table">
+        <thead align="left" class="thead-light">
+            <tr>
+                <!--status -->
+                <th></th>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+
+
+        <tbody align="left" id="myTableId">
+            {% if reminders %}
+                <form action="/checked" method="post">
+                    {% for reminder in reminders %}
+                        <tr class="clickable">
+                            <td class="checkbox">
+                                <div class="larger">
+                                    <input type="checkbox" value="{{ reminder.id }}" id="{{ reminder.id }}" name="check_reminder" class="check_reminder">
+                                </div>
+                            </td>
+                            <td>{{ reminder.name }}</td>
+                            <td>{{ reminder.details }}</td>
+                            <td>{{ reminder.datetime }}</td>
+                        </tr>
+                    {% endfor %}
+                </form>
+            {% else %}
+                <tr>
+                    <td colspan="4" align="center">You have no items on your checklist</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <button type="submit" id="mark_completed" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
+
+
+{% endblock %}

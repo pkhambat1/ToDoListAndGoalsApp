@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block main %}
+    <img alt="{{ top }}" class="border" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://rollbar.com/static/error-screen-2-bbebeef8c859a4d9201474bb2d4e25b0-2e6af.png"/>
+{% endblock %}
