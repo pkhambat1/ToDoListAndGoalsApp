@@ -43,9 +43,13 @@
                                         <input type="radio" value="{{ list.id }}" id="{{ list.id }}" name="check_list" class="check_list">
                                         {{ list.name }}
                                     </th>
-                                    <th class="list_details">
-                                        ({{ list.details }})
-                                    </th>
+                                    {% if list.details %}
+                                        <th class="list_details">
+                                            ({{ list.details }})
+                                        </th>
+                                    {% else %}
+                                        <th></th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                         </table>
