@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Dashboard
+    Goals
 {% endblock %}
 
 {% block main %}
@@ -9,14 +9,17 @@
 
     <!-- app's own JavaScript -->
     <script src="/static/scripts.js"></script>
+    <script src="/static/goals.js"></script>
 
-    <h1 class="display-5">Long-term goals</h2>
+    <h2 class="display-5">Long-term goals</h2>
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
-    <form action="/new_goal">
-        <button type="submit" id="new_reminder" class="btn btn-success btn-md center-block" Style="width: 150px; Height: 50px">New Goal</button>
-    </form>
+    <div style="float: right;">
+        <form action="/new_goal">
+            <button type="submit" id="new_reminder" class="btn btn-success btn-md center-block" Style="width: 150px; Height: 50px">New Goal</button>
+        </form>
+    </div>
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
@@ -24,7 +27,7 @@
         <thead align="left" class="thead-light">
             <tr>
                 <!--status -->
-                <th></th>
+                <th class="narrow"></th>
                 <th>Name</th>
                 <th>Details</th>
                 <th>Created</th>
@@ -34,13 +37,11 @@
 
         <tbody align="left" id="myTableId">
             {% if goals %}
-                <form action="/checked_goal" method="post">
+                <form method="post">
                     {% for goal in goals %}
-                        <tr class="clickable_goals">
+                        <tr class="clickable">
                             <td class="checkbox">
-                                <div class="larger">
-                                    <input type="checkbox" value="{{ goal.id }}" id="{{ goal.id }}" name="check_goal" class="check_goal">
-                                </div>
+                                <input type="checkbox" value="{{ goal.id }}" id="{{ goal.id }}" name="check_goal" class="check_goal">
                             </td>
                             <td>{{ goal.name }}</td>
                             <td>{{ goal.details }}</td>
@@ -55,7 +56,11 @@
             {% endif %}
         </tbody>
     </table>
-    <button type="submit" id="mark_completed_goals" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
-
+    <div style="float: left;">
+        <button type="submit" id="mark_completed_goals" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
+    </div>
+    <div style="float: right;">
+        <button type="submit" id="delete_goal" class="btn btn-danger" Style="width: 170px;">Delete</button>
+    </div>
 
 {% endblock %}

@@ -1,13 +1,12 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Dashboard
+    Completed
 {% endblock %}
 
 {% block main %}
 
-
-    <h1 class="display-5">Completed tasks!</h2>
+    <h1 class="display-5">Completed tasks!</h1>
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
@@ -32,10 +31,12 @@
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="4" align="center">You have no completed items</td>
+                    <td colspan="3" align="center">You have no completed items</td>
                 </tr>
             {% endif %}
         </tbody>
-
     </table>
+    <form method="post" action="/completed">
+        <button type="submit" id="clear_completed" class="btn btn-danger" Style="width: 170px;">Clear Completed</button>
+    </form>
 {% endblock %}

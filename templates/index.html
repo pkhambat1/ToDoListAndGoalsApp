@@ -6,17 +6,19 @@
 
 {% block main %}
 
-
     <!-- app's own JavaScript -->
     <script src="/static/scripts.js"></script>
+    <script src="/static/todos.js"></script>
 
-    <h1 class="display-2">Welcome, {{ name }} </h2>
+    <h1 class="display-2">Welcome, {{ name }} </h1>
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
-    <form action="/new">
-        <button type="submit" id="new_reminder" class="btn btn-primary btn-md center-block" Style="width: 150px; Height: 50px">New ToDo</button>
-    </form>
+    <div style="float: right;">
+        <form action="/new" method="get">
+            <button type="submit" id="new_reminder" class="btn btn-primary btn-md center-block" Style="width: 150px; Height: 50px;">New ToDo</button>
+        </form>
+    </div>
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
@@ -24,7 +26,7 @@
         <thead align="left" class="thead-light">
             <tr>
                 <!--status -->
-                <th></th>
+                <th class="narrow"></th>
                 <th>Name</th>
                 <th>Details</th>
                 <th>Created</th>
@@ -34,7 +36,7 @@
 
         <tbody align="left" id="myTableId">
             {% if reminders %}
-                <form action="/checked" method="post">
+                <form>
                     {% for reminder in reminders %}
                         <tr class="clickable">
                             <td class="checkbox">
@@ -55,7 +57,11 @@
             {% endif %}
         </tbody>
     </table>
-    <button type="submit" id="mark_completed" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
-
+    <div style="float: left;">
+        <button type="submit" id="mark_completed" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
+    </div>
+    <div style="float: right;">
+        <button type="submit" id="delete" class="btn btn-danger" Style="width: 170px;">Delete</button>
+    </div>
 
 {% endblock %}

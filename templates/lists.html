@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Lists
+{% endblock %}
+
+{% block main %}
+
+
+    <!-- app's own JavaScript -->
+    <script src="/static/scripts.js"></script>
+    <script src="/static/lists.js"></script>
+    <script src="/static/todos.js"></script>
+
+
+
+    <h1 class="display-5">My Lists</h1>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <div style="float: left;">
+        <form action="/lists/new_list">
+            <button type="submit" class="btn btn-info" Style="width: 150px; Height: 50px">New List</button>
+        </form>
+    </div>
+    <div style="float: right;">
+        <form action="/lists/new_item">
+            <button type="submit" class="btn btn-info" Style="width: 150px; Height: 50px">Add Item</button>
+        </form>
+    </div>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+
+        {% if lists %}
+            <form method="post">
+                <div id="myLists">
+                    {% for list in lists %}
+                        <table class="table">
+                            <thead class="thead-light" id="myTableId">
+                                <tr class="clickable_lists" id="{{ list.id }}" align="left">
+                                    <th>
+                                        <input type="radio" value="{{ list.id }}" id="{{ list.id }}" name="check_list" class="check_list">
+                                        {{ list.name }}
+                                    </th>
+                                    <th class="list_details">
+                                        ({{ list.details }})
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="myItems" id="{{ list.id }}">
+                            <!--Fill with items if available-->
+                        </div>
+                    {% endfor %}
+                </div>
+            </form>
+        {% else %}
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="4" align="center">You have no lists</td>
+                    </tr>
+                </thead>
+            </table>
+        {% endif %}
+
+        <div style="float: left;">
+            <button type="submit" id="mark_completed_items" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
+        </div>
+        <div style="float: right;">
+            <button type="submit" id="delete_item" class="btn btn-danger" Style="width: 170px;">Delete Items</button>
+            <span style="display:inline-block; height: 40px;width: 100%;"></span>
+            <form action="/lists/delete" method="get">
+                <button type="submit" id="delete_list" class="btn btn-danger" Style="width: 170px;">Delete List</button>
+            </form>
+        </div>
+
+
+{% endblock %}

@@ -26,6 +26,11 @@ nav .navbar-brand .green
     color: #42af24;
 }
 
+nav .navbar-brand .orange
+{
+    color: #FF8800
+}
+
 main .form-control
 {
     /* center form controls */
@@ -69,10 +74,7 @@ table {
 td {
     position: relative;
     padding: 5px 10px;
-}
-
-td {
-  width: 30% ;
+    text-align: left;
 }
 
 .checkbox {
@@ -83,19 +85,40 @@ textarea {
   resize: none;
 }
 
-.clickable{
-   cursor: hand;
-}
-
 .strikeout td:before {
     content: " ";
     position: absolute;
     top: 50%;
     left: 0;
-    border-bottom: 2px solid #42af24;
+    border-bottom: 2px solid #1d8ece;
     width: 100%;
 }
 
-.clickable_goals, .clickable, button {
+.clickable_goals, .clickable_lists, .clickable, button {
     cursor: pointer;
+}
+
+
+.check_list {
+    visibility: hidden;
+}
+
+table {
+    table-layout: fixed;
+}
+
+.wide {
+  width: 150px;
+}
+
+button, #list, input[type=text], input[type=password] {
+    width: 300px;
+}
+
+.navbar-toggler {
+    width: 56px;
+}
+
+.narrow {
+    width: 10%;
 }

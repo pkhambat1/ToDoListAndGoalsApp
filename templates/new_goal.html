@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Quote
+    New Goal
 {% endblock %}
 
 {% block main %}
@@ -9,7 +9,7 @@
     <!-- app's own JavaScript -->
     <script src="/static/scripts.js"></script>
 
-    <h1 class="display-5">Create a new goal!</h2>
+    <h1 class="display-5">Create a new goal!</h1>
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
 
@@ -20,6 +20,6 @@
         <div class="form-group">
             <textarea name="details" class="form-control" autocomplete="off" rows="5" placeholder="Details (optional)" Style="width: 300px;"></textarea>
         </div>
-        <button class="btn btn-success" type="submit" Style="width: 170px;" >Add</button>
+        <button class="btn btn-success" type="submit">Add</button>
     </form>
 {% endblock %}

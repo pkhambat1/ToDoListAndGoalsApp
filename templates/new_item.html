@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    New ToDo
+    New Item
 {% endblock %}
 
 {% block main %}
@@ -9,12 +9,20 @@
     <!-- app's own JavaScript -->
     <script src="/static/scripts.js"></script>
 
-    <h1 class="display-5">Create a ToDo!</h1>
+    <h1 class="display-5">Add an Item!</h1>
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
-    <form action="/new" method="post">
+    <form action="/lists/new_item" method="post">
         <div class="form-group">
-            <input name="reminder" autocomplete="off" autofocus class="form-control" placeholder="To Do" type="text" Style="width: 300px;"/>
+            <select name="list" class="form-control" id="list" autofocus>
+                <option disabled selected value>List</option>
+                {% for list in lists %}
+                <option value="{{ list.id }}">{{ list.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input name="item" autocomplete="off" class="form-control" placeholder="Item" type="text"/>
         </div>
         <div class="form-group">
             <textarea name="details"class="form-control" autocomplete="off" rows="5" placeholder="Details (optional)" Style="width: 300px;"></textarea>

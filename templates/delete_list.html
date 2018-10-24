@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Delete List
+{% endblock %}
+
+{% block main %}
+
+    <!-- app's own JavaScript -->
+    <script src="/static/scripts.js"></script>
+
+    <h1 class="display-5">Delete List</h1>
+    <p class="lead">
+     Caution: This will also delete all your list <i>items</i>!
+    </p>
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <form action="/lists/delete" method="post">
+        <div class="form-group">
+            <select name="list" class="form-control" id="list" autofocus>
+                <option disabled selected value>List</option>
+                {% for list in lists %}
+                <option value="{{ list.id }}">{{ list.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
+{% endblock %}

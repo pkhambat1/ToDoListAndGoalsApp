@@ -284,41 +284,160 @@ def new_goal():
         return render_template("new_goal.html")
 
 
-@app.route("/checked", methods=["POST"])
+@app.route("/completed", methods=["GET", "POST"])
 @login_required
-def checked():
-    """Update reminders & completed tables with checked data
-    and return new list of reminders asjson object to ajax"""
+def completed():
+    """Show completed tasks"""
+    if request.method == "POST":
 
-    checked_reminders = request.form.getlist("check_reminder")
+        # Clear completed
+        db.execute("DELETE FROM completed WHERE user_id = :user_id",
+                   user_id=session["user_id"])
+        flash("Cleared all completed tasks!")
+        return redirect("/completed")
 
-    for checked_item in checked_reminders:
-        print(checked_item, "checked_item")
-        checked_reminder = db.execute("SELECT * FROM reminders WHERE id = :checked",
-                                      checked=checked_item)
-        checked_reminder = checked_reminder[0]
+    else:
+        completed = db.execute("SELECT * FROM completed WHERE user_id = :user_id",
+                               user_id=session["user_id"])
+
+        return render_template("completed.html", completed=completed)
+
+
+@app.route("/lists/new_list", methods=["GET", "POST"])
+@login_required
+def new_list():
+    """Create New List"""
+    if request.method == "POST":
+
+        list_name = request.form.get("list")
+        details = request.form.get("details")
+
+        if not list_name:
+            return apology("Missing List")
+
+        # Insert reminder
+        db.execute("INSERT INTO lists (name, details, user_id) VALUES (:list_name, :details, :user_id)",
+                   list_name=list_name, details=details, user_id=session["user_id"])
+
+        return redirect("/lists")
+
+    else:
+        return render_template("new_list.html")
+
+
+@app.route("/lists/new_item", methods=["GET", "POST"])
+@login_required
+def new_item():
+    """Create New Item"""
+    if request.method == "POST":
+
+        item_name = request.form.get("item")
+        details = request.form.get("details")
+        list_id = request.form.get("list")
+
+        if not item_name:
+            return apology("Missing Item")
+        elif not list_id:
+            return apology("Missing list")
+
+        # Insert reminder
+        db.execute("INSERT INTO items (name, details, user_id, list_id) VALUES (:item_name, :details, :user_id, :list_id)",
+                   item_name=item_name, details=details, user_id=session["user_id"], list_id=list_id)
+
+        return redirect("/lists")
+
+    else:
+        lists = db.execute("SELECT * FROM lists WHERE user_id = :user_id",
+                           user_id=session["user_id"])
+        return render_template("new_item.html", lists=lists)
+
+
+@app.route('/lists/delete', methods=["GET", "POST"])
+@login_required
+def delete_list():
+    """Delete entire list (Including items within)"""
+    if request.method == "POST":
+        list_id = request.form.get("list")
+
+        if not list_id:
+            return apology("Missing list")
+
+        # Delete all list items
+        db.execute("DELETE FROM items WHERE list_id = :list_id",
+                   list_id=list_id)
+
+        # Delete list
+        db.execute("DELETE FROM lists WHERE id = :list_id",
+                   list_id=list_id)
+        return redirect("/lists")
+
+    else:
+        # Get lists
+        lists = db.execute("SELECT * FROM lists WHERE user_id = :user_id",
+                           user_id=session["user_id"])
+
+        return render_template("delete_list.html", lists=lists)
+
+
+@app.route('/lists', methods=["GET", "POST"])
+@login_required
+def list_page():
+    """GET: Show list names,
+       POST: show checkale list items of respective list"""
+    if request.method == 'POST':
+        list_id = request.form.getlist("check_list")
+        list_id = list_id[0]
+        print(list_id, "list_id")
+        # Get list ID from form submission
+        items = db.execute("SELECT * FROM items WHERE user_id = :user_id AND list_id = :list_id",
+                           user_id=session["user_id"], list_id=list_id)
+        print(jsonify(items), "jsonify(items)")
+        return jsonify(items)
+
+    else:
+        lists = db.execute("SELECT * FROM lists WHERE user_id = :user_id",
+                           user_id=session["user_id"])
+
+        return render_template("lists.html", lists=lists)
+
+# ========================AJAX CALLS========================
+
+
+@app.route("/checked_item", methods=["POST"])
+@login_required
+def checked_item():
+    """Update items & completed tables with checked data
+    and return new list of List Items asjson object to ajax"""
+
+    checked_items = request.form.getlist("check_item")
+    print(checked_items, "checked_items")
+
+    list_id = request.form.get("list_id")
+
+    for checked_item in checked_items:
+
+        checked_item = db.execute("SELECT * FROM items WHERE id = :checked",
+                                  checked=checked_item)
+        checked_item = checked_item[0]
 
         # Insert into completed
         db.execute("INSERT INTO completed (name, details, user_id) VALUES (:name, :details, :user_id)",
-                   name=checked_reminder['name'], details=checked_reminder['details'], user_id=checked_reminder['user_id'])
+                   name=checked_item['name'], details=checked_item['details'], user_id=session['user_id'])
         # Delete from reminders
-        db.execute("DELETE FROM reminders WHERE id = :reminder_id",
-                   reminder_id=checked_reminder['id'])
+        db.execute("DELETE FROM items WHERE id = :item_id",
+                   item_id=checked_item['id'])
 
-        # Get updated reminders
-        reminders = db.execute("SELECT * FROM reminders WHERE user_id = :user_id",
-                               user_id=session["user_id"])
+    items = db.execute("SELECT * FROM items WHERE list_id = :list_id",
+                       list_id=list_id)
 
-    print(checked_reminders, "checked_reminders")
-
-    return (jsonify(reminders))
+    return (jsonify(items))
 
 
 @app.route("/checked_goal", methods=["POST"])
 @login_required
 def checked_goal():
     """Update goals & completed tables with checked data
-    and return new list of reminders asjson object to ajax"""
+    and return new list of Goals as json object to ajax"""
 
     checked_goals = request.form.getlist("check_goal")
 
@@ -330,28 +449,114 @@ def checked_goal():
 
         # Insert into completed
         db.execute("INSERT INTO completed (name, details, user_id) VALUES (:name, :details, :user_id)",
-                   name=checked_goal['name'], details=checked_goal['details'], user_id=checked_goal['user_id'])
+                   name=checked_goal['name'], details=checked_goal['details'], user_id=session['user_id'])
         # Delete from reminders
         db.execute("DELETE FROM goals WHERE id = :goal_id",
                    goal_id=checked_goal['id'])
 
-        # Get updated reminders
-        goals = db.execute("SELECT * FROM goals WHERE user_id = :user_id",
-                           user_id=session["user_id"])
+    # Get updated reminders
+    goals = db.execute("SELECT * FROM goals WHERE user_id = :user_id",
+                       user_id=session["user_id"])
 
     print(checked_goals, "checked_goals")
 
     return (jsonify(goals))
 
 
-@app.route("/completed")
+@app.route("/checked", methods=["POST"])
 @login_required
-def completed():
-    """Show completed tasks"""
-    completed = db.execute("SELECT * FROM completed WHERE user_id = :user_id",
+def checked():
+    """Update todos & completed tables with checked data
+    and return new list of ToDos as json object to ajax"""
+
+    checked_reminders = request.form.getlist("check_reminder")
+
+    for checked_item in checked_reminders:
+        print(checked_item, "checked_item")
+        checked_reminder = db.execute("SELECT * FROM reminders WHERE id = :checked",
+                                      checked=checked_item)
+        checked_reminder = checked_reminder[0]
+
+        # Insert into completed
+        db.execute("INSERT INTO completed (name, details, user_id) VALUES (:name, :details, :user_id)",
+                   name=checked_reminder['name'], details=checked_reminder['details'], user_id=session['user_id'])
+        # Delete from reminders
+        db.execute("DELETE FROM reminders WHERE id = :reminder_id",
+                   reminder_id=checked_reminder['id'])
+
+    # Get updated reminders
+    reminders = db.execute("SELECT * FROM reminders WHERE user_id = :user_id",
                            user_id=session["user_id"])
 
-    return render_template("completed.html", completed=completed)
+    print(checked_reminders, "checked_reminders")
+
+    return (jsonify(reminders))
+
+
+@app.route("/delete", methods=["POST"])
+@login_required
+def delete():
+    """Delete selected ToDo items"""
+    checked_reminders = request.form.getlist("check_reminder")
+    for checked_reminder in checked_reminders:
+        print(checked_reminder, "checked_reminder")
+        checked = db.execute("SELECT * FROM reminders WHERE id = :checked_reminder",
+                             checked_reminder=checked_reminder)
+        checked = checked[0]
+
+        # Delete from reminders
+        db.execute("DELETE FROM reminders WHERE id = :reminder_id",
+                   reminder_id=checked['id'])
+
+    # Get updated reminders
+    reminders = db.execute("SELECT * FROM reminders WHERE user_id = :user_id",
+                           user_id=session["user_id"])
+    print(reminders, "reminders")
+    return (jsonify(reminders))
+
+
+@app.route("/delete_goal", methods=["POST"])
+@login_required
+def delete_goal():
+    """Delete selected goal itams"""
+    checked_goals = request.form.getlist("check_goal")
+    for checked_goal in checked_goals:
+        checked = db.execute("SELECT * FROM goals WHERE id = :checked_goal",
+                             checked_goal=checked_goal)
+        checked = checked[0]
+
+        # Delete from goals
+        db.execute("DELETE FROM goals WHERE id = :goal_id",
+                   goal_id=checked['id'])
+
+    # Get updated goals
+    goals = db.execute("SELECT * FROM goals WHERE user_id = :user_id",
+                       user_id=session["user_id"])
+    print(goals, "goals")
+    return (jsonify(goals))
+
+
+@app.route("/delete_item", methods=["POST"])
+@login_required
+def delete_item():
+    """Delete selected list items"""
+    checked_items = request.form.getlist("check_item")
+    list_id = request.form.get("list_id")
+
+    for checked_item in checked_items:
+        checked = db.execute("SELECT * FROM items WHERE id = :checked_item",
+                             checked_item=checked_item)
+        checked = checked[0]
+
+        # Delete from items
+        db.execute("DELETE FROM items WHERE id = :item_id",
+                   item_id=checked['id'])
+
+    # Get updated items
+    items = db.execute("SELECT * FROM items WHERE list_id = :list_id",
+                       list_id=list_id)
+    print(items, "items")
+    return (jsonify(items))
 
 
 def errorhandler(e):

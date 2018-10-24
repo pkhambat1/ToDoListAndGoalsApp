@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Items
+{% endblock %}
+
+{% block main %}
+
+
+    <!-- app's own JavaScript -->
+    <script src="/static/scripts.js"></script>
+
+    <h2 class="display-5">List Items</h2>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <form action="/new_goal">
+        <button type="submit" id="new_reminder" class="btn btn-success btn-md center-block" Style="width: 150px; Height: 50px">New Item</button>
+    </form>
+
+    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+
+    <table class="table">
+        <thead align="left" class="thead-light">
+            <tr>
+                <!--status -->
+                <th></th>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+
+
+        <tbody align="left" id="myTableId">
+            {% if items %}
+                <form action="/checked_item" method="post">
+                    {% for item in items %}
+                        <tr class="clickable_items">
+                            <td class="checkbox">
+                                <div class="larger">
+                                    <input type="checkbox" value="{{ item.id }}" id="{{ item.id }}" name="check_item" class="check_item">
+                                </div>
+                            </td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.details }}</td>
+                            <td>{{ item.datetime }}</td>
+                        </tr>
+                    {% endfor %}
+                </form>
+            {% else %}
+                <tr>
+                    <td colspan="4" align="center">You have no items on your list</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <button type="submit" id="mark_completed_items" class="btn btn-secondary btn-md center-block" Style="width: 170px;">Mark as completed</button>
+
+
+{% endblock %}
