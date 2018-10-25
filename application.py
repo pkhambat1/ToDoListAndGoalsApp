@@ -129,6 +129,7 @@ def register():
         firstname = request.form.get("firstname")
         lastname = request.form.get("lastname")
         username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
@@ -137,6 +138,8 @@ def register():
             return apology("Missing first name!")
         elif not username:
             return apology("Missing username!")
+        elif not email:
+            return apology("Missing email!")
         elif not password:
             return apology("Missing password!")
         elif not confirmation:
@@ -157,8 +160,8 @@ def register():
 
         # Add user to database
 
-        db.execute("INSERT INTO users (firstname, lastname, username, hash) VALUES (:firstname, :lastname, :username, :hashed_password)",
-                   firstname=firstname, lastname=lastname, username=username, hashed_password=hashed_password)
+        db.execute("INSERT INTO users (firstname, lastname, email, username, hash) VALUES (:firstname, :lastname, :email, :username, :hashed_password)",
+                   firstname=firstname, lastname=lastname, email=email, username=username, hashed_password=hashed_password)
 
         # Automatically login user
         # Query database for username
