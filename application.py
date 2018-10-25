@@ -23,7 +23,8 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///doneanddone.db")
+db = SQL("postgres://dnedntjbatoqvz:2f5809d29929f230992bc3a295b31dcf2c65497274b44cc3145e4b364f6b28d0@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d4obbeungvdjk8
+")
 
 # Ensure responses aren't cached
 
