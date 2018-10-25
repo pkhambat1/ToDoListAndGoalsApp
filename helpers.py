@@ -5,6 +5,7 @@ import urllib.parse
 from datetime import datetime
 from flask import redirect, render_template, request, session
 from functools import wraps
+import time
 
 
 def login_required(f):
@@ -33,3 +34,6 @@ def apology(message, code=400):
             s = s.replace(old, new)
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
+
+def get_datetime():
+    return time.ctime()

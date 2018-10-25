@@ -5,7 +5,6 @@
 import os
 
 from cs50 import SQL
-import datetime
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 import re
@@ -13,7 +12,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required
+from helpers import apology, login_required, get_datetime
 
 
 # Configure application
@@ -23,8 +22,7 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure CS50 Library to use SQLite database
-db = SQL("postgres://dnedntjbatoqvz:2f5809d29929f230992bc3a295b31dcf2c65497274b44cc3145e4b364f6b28d0@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d4obbeungvdjk8
-")
+db = SQL("postgres://dnedntjbatoqvz:2f5809d29929f230992bc3a295b31dcf2c65497274b44cc3145e4b364f6b28d0@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d4obbeungvdjk8")
 
 # Ensure responses aren't cached
 
@@ -91,9 +89,13 @@ def login():
         # User reached route via POST (as by submitting a form via POST)
         users = db.execute("SELECT * FROM users WHERE username = :username",
                            username=request.form.get("username"))
+        print(users, "users")
+        print(len(users), "len(users)")
+        print(check_password_hash(users[0]["password"], request.form.get("password")), 'check_password_hash(users[0]["password"], request.form.get("password"))')
+
 
         # Ensure username exists and password is correct
-        if len(users) != 1 or not check_password_hash(users[0]["hash"], request.form.get("password")):
+        if len(users) != 1 or not check_password_hash(users[0]["password"], request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -151,7 +153,7 @@ def register():
             return apology("Password and confirmation do not match!")
 
         # Hash password
-        hashed_password = generate_password_hash(password)
+        password = generate_password_hash(password)
 
         # Ensure username is unique
         username_check = db.execute("SELECT * FROM users WHERE username = :username",
@@ -161,8 +163,8 @@ def register():
 
         # Add user to database
 
-        db.execute("INSERT INTO users (firstname, lastname, email, username, hash) VALUES (:firstname, :lastname, :email, :username, :hashed_password)",
-                   firstname=firstname, lastname=lastname, email=email, username=username, hashed_password=hashed_password)
+        db.execute("INSERT INTO users (firstname, lastname, email, username, password, datetime) VALUES (:firstname, :lastname, :email, :username, :password, :datetime)",
+                   firstname=firstname, lastname=lastname, email=email, username=username, password=password, datetime=get_datetime())
 
         # Automatically login user
         # Query database for username
@@ -206,10 +208,10 @@ def change():
         users = db.execute("SELECT * FROM users WHERE id = :user_id",
                            user_id=session["user_id"])
 
-        print(users[0]["hash"])
+        print(users[0]["password"])
 
         # Ensure old password is correct
-        if not check_password_hash(users[0]["hash"], old_password):
+        if not check_password_hash(users[0]["password"], old_password):
             return apology("Incorrect password!")
 
         # Ensure other fields are filled
@@ -227,11 +229,11 @@ def change():
         print(hashed_new_password)
 
         # Ensure new password is not same as old password
-        if check_password_hash(users[0]["hash"], new_password):
+        if check_password_hash(users[0]["password"], new_password):
             return apology("New password matches current password, please enter different password!")
 
         # Change password
-        db.execute("UPDATE users set hash = :hashed_new_password WHERE id = :user_id",
+        db.execute("UPDATE users set password = :hashed_new_password WHERE id = :user_id",
                    hashed_new_password=hashed_new_password, user_id=session["user_id"])
 
         # Flash message
@@ -257,8 +259,8 @@ def new():
             return apology("Missing Reminder")
 
         # Insert reminder
-        db.execute("INSERT INTO reminders (name, details, user_id) VALUES (:reminder, :details, :user_id)",
-                   reminder=reminder, details=details, user_id=session["user_id"])
+        db.execute("INSERT INTO reminders (name, details, user_id, datetime) VALUES (:reminder, :details, :user_id, :datetime)",
+                   reminder=reminder, details=details, user_id=session["user_id"], datetime=get_datetime())
 
         return redirect("/")
 
@@ -279,8 +281,8 @@ def new_goal():
             return apology("Missing Goal")
 
         # Insert reminder
-        db.execute("INSERT INTO goals (name, details, user_id) VALUES (:goal, :details, :user_id)",
-                   goal=goal, details=details, user_id=session["user_id"])
+        db.execute("INSERT INTO goals (name, details, user_id, datetime) VALUES (:goal, :details, :user_id, :datetime)",
+                   goal=goal, details=details, user_id=session["user_id"], datetime=get_datetime())
 
         return redirect("/goals")
 
@@ -319,9 +321,9 @@ def new_list():
         if not list_name:
             return apology("Missing List")
 
-        # Insert reminder
-        db.execute("INSERT INTO lists (name, details, user_id) VALUES (:list_name, :details, :user_id)",
-                   list_name=list_name, details=details, user_id=session["user_id"])
+        # Insert list
+        db.execute("INSERT INTO lists (name, details, user_id, datetime) VALUES (:list_name, :details, :user_id, :datetime)",
+                   list_name=list_name, details=details, user_id=session["user_id"], datetime=get_datetime())
 
         return redirect("/lists")
 
@@ -345,8 +347,8 @@ def new_item():
             return apology("Missing list")
 
         # Insert reminder
-        db.execute("INSERT INTO items (name, details, user_id, list_id) VALUES (:item_name, :details, :user_id, :list_id)",
-                   item_name=item_name, details=details, user_id=session["user_id"], list_id=list_id)
+        db.execute("INSERT INTO items (name, details, user_id, list_id, datetime) VALUES (:item_name, :details, :user_id, :list_id, :datetime)",
+                   item_name=item_name, details=details, user_id=session["user_id"], list_id=list_id, datetime=get_datetime())
 
         return redirect("/lists")
 
@@ -393,8 +395,8 @@ def list_page():
         list_id = list_id[0]
         print(list_id, "list_id")
         # Get list ID from form submission
-        items = db.execute("SELECT * FROM items WHERE user_id = :user_id AND list_id = :list_id",
-                           user_id=session["user_id"], list_id=list_id)
+        items = db.execute("SELECT * FROM items WHERE list_id = :list_id",
+                           list_id=list_id)
         print(jsonify(items), "jsonify(items)")
         return jsonify(items)
 
@@ -425,8 +427,8 @@ def checked_item():
         checked_item = checked_item[0]
 
         # Insert into completed
-        db.execute("INSERT INTO completed (name, details, user_id) VALUES (:name, :details, :user_id)",
-                   name=checked_item['name'], details=checked_item['details'], user_id=session['user_id'])
+        db.execute("INSERT INTO completed (name, details, user_id, datetime) VALUES (:name, :details, :user_id, :datetime)",
+                   name=checked_item['name'], details=checked_item['details'], user_id=session['user_id'], datetime=get_datetime())
         # Delete from reminders
         db.execute("DELETE FROM items WHERE id = :item_id",
                    item_id=checked_item['id'])
@@ -452,8 +454,8 @@ def checked_goal():
         checked_goal = checked_goal[0]
 
         # Insert into completed
-        db.execute("INSERT INTO completed (name, details, user_id) VALUES (:name, :details, :user_id)",
-                   name=checked_goal['name'], details=checked_goal['details'], user_id=session['user_id'])
+        db.execute("INSERT INTO completed (name, details, user_id, datetime) VALUES (:name, :details, :user_id, :datetime)",
+                   name=checked_goal['name'], details=checked_goal['details'], user_id=session['user_id'], datetime=get_datetime())
         # Delete from reminders
         db.execute("DELETE FROM goals WHERE id = :goal_id",
                    goal_id=checked_goal['id'])
@@ -482,8 +484,8 @@ def checked():
         checked_reminder = checked_reminder[0]
 
         # Insert into completed
-        db.execute("INSERT INTO completed (name, details, user_id) VALUES (:name, :details, :user_id)",
-                   name=checked_reminder['name'], details=checked_reminder['details'], user_id=session['user_id'])
+        db.execute("INSERT INTO completed (name, details, user_id, datetime) VALUES (:name, :details, :user_id, :datetime)",
+                   name=checked_reminder['name'], details=checked_reminder['details'], user_id=session['user_id'], datetime=get_datetime())
         # Delete from reminders
         db.execute("DELETE FROM reminders WHERE id = :reminder_id",
                    reminder_id=checked_reminder['id'])
