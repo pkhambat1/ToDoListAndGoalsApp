@@ -1,6 +1,3 @@
-# https://github.com/mrichman/flask-redis.git
-# ***Absolutely all credit goes to Mark Richman - https://github.com/mrichman***
-
 import pickle
 from datetime import timedelta
 from uuid import uuid4
