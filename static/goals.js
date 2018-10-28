@@ -9,14 +9,11 @@ $(document).ready(function() {
                 url: "checked_goal",
                 data: $('form').serialize(),
                 success: function(data) {
-                    console.log(data, "data");
                     // Empty reminders list
                     $('#myTableId').empty();
 
                     // Table filler html
                     var rawhtml = "";
-
-                    console.log(data.length);
 
                     if (data.length != 0) {
                         // Fill reminders list
@@ -49,20 +46,16 @@ $(document).ready(function() {
     // Delete
     $('#delete_goal').click(function() {
         if ($('form').serialize().length != 0) {
-            console.log("form stuff found");
             $.ajax({
                 type: "POST",
                 url: "delete_goal",
                 data: $('form').serialize(),
                 success: function(data) {
-                    console.log(data, "data");
                     // Empty reminders list
                     $('#myTableId').empty();
 
                     // Table filler html
                     var rawhtml = "";
-
-                    console.log(data.length);
 
                     if (data.length != 0) {
                         // Fill reminders list

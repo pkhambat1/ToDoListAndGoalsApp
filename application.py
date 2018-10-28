@@ -1,6 +1,7 @@
 # A simple TODO app that lets you add TODO items and check them off, hopefully helping your productivity
 # This project helped me learn a lot about JQuery, Ajax and Flask
 # Updated to include a "Goals" tab which I had wanted from the start
+# Updated to have custom lists with individual items
 
 import os
 
@@ -9,7 +10,6 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 from flask_session import Session
 import datetime
 import re
-from redissession import RedisSessionInterface
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -20,7 +20,7 @@ from helpers import apology, login_required, get_datetime
 # Configure application
 app = Flask(__name__)
 app.permanent_session_lifetime = datetime.timedelta(days=365)
-app.secret_key = "12341234"
+app.secret_key = os.getenv('SECRET_KEY', 'for dev')
 
 # Configure CS50 Library to use database
 db = SQL("postgres://dnedntjbatoqvz:2f5809d29929f230992bc3a295b31dcf2c65497274b44cc3145e4b364f6b28d0@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d4obbeungvdjk8")

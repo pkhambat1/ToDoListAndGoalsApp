@@ -9,11 +9,9 @@ $(document).ready(function() {
         // Link Table headers (lists) to checkboxes
         if ($(this).find('th input[type=radio]').prop("checked") == false) {
             $(this).find('th input[type=radio]').prop('checked', true);
-            console.log(this, "this");
             $(this).children('td, th').css('background-color', '#caccce');
         } else if ($(this).find('th input[type=radio]').prop("checked") == true) {
             $(this).find('th input[type=radio]').prop('checked', false);
-            console.log(this, "this2");
             $(this).children('td, th').css('background-color', '#e9ecef');
         }
 
@@ -29,7 +27,6 @@ $(document).ready(function() {
                 url: "lists",
                 data: $('form').serialize(),
                 success: function(data) {
-                    console.log("change button name");
 
                     // Table filler html
                     var rawhtml = '<table class="table">';
@@ -71,11 +68,9 @@ $(document).ready(function() {
             url: "checked_item",
             data: $('form').serialize(),
             success: function(data) {
-                console.log(data);
                 // Empty reminders list
                 $('.myItems').empty();
                 var list_id = $(':radio:checked').closest('tr').attr('id');
-                console.log(list_id);
                 // Table filler html
                 var rawhtml = '<table class="table">';
                 if (data.length != 0) {
@@ -115,11 +110,9 @@ $(document).ready(function() {
             url: "delete_item",
             data: $('form').serialize(),
             success: function(data) {
-                console.log(data);
                 // Empty reminders list
                 $('.myItems').empty();
                 var list_id = $(':radio:checked').closest('tr').attr('id');
-                console.log(list_id);
                 // Table filler html
                 var rawhtml = '<table class="table">';
                 if (data.length != 0) {

@@ -8,11 +8,9 @@ $(document).ready(function() {
 
     // Make entire rows clickable
     $(document).on('click', '.clickable', function() {
-        console.log("click");
         // If unchecked row is clicked
         if ($(this).find('td input[type=checkbox]').prop("checked") == false) {
             // Row click
-            console.log(this, "this");
             if (event.target.type !== 'checkbox') {
                 $(this).find('td input[type=checkbox]').prop('checked', true);
                 $(this).css('background', '#b8daff');
