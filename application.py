@@ -7,6 +7,7 @@ import os
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
+import datetime
 import re
 from redissession import RedisSessionInterface
 from tempfile import mkdtemp
@@ -18,29 +19,8 @@ from helpers import apology, login_required, get_datetime
 
 # Configure application
 app = Flask(__name__)
-app.session_interface = RedisSessionInterface()
-
-# Ensure templates are auto-reloaded
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-
-# Ensure responses aren't cached
-
-
-@app.after_request
-def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
-
-# Configure session to use filesystem (instead of signed cookies)
-app.config["SESSION_FILE_DIR"] = mkdtemp()
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-app.config['SECRET_KEY'] = "1234abcd"
-app.secret_key = "1234abcd"
-Session(app)
+app.permanent_session_lifetime = datetime.timedelta(days=365)
+app.secret_key = "12341234"
 
 # Configure CS50 Library to use database
 db = SQL("postgres://dnedntjbatoqvz:2f5809d29929f230992bc3a295b31dcf2c65497274b44cc3145e4b364f6b28d0@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d4obbeungvdjk8")
