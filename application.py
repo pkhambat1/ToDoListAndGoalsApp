@@ -38,6 +38,7 @@ def after_request(response):
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['SECRET_KEY'] = "1234abcd"
 Session(app)
 
 # Configure CS50 Library to use database
@@ -575,8 +576,3 @@ def errorhandler(e):
 # listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
-
-
-
-if __name__ == '__main__':
-    app.run()
