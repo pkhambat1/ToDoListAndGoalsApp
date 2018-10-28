@@ -15,18 +15,18 @@
             <tr>
                 <th>Name</th>
                 <th>Details</th>
-                <th>Created</th>
+                <th>Completed</th>
             </tr>
         </thead>
 
 
         <tbody align="left">
             {% if completed %}
-                {% for reminder in completed | reverse %}
+                {% for item in completed | reverse %}
                     <tr class="strikeout">
-                        <td>{{ reminder.name }}</td>
-                        <td>{{ reminder.details }}</td>
-                        <td>{{ reminder.datetime }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.details }}</td>
+                        <td>{{ item.datetime }}</td>
                     </tr>
                 {% endfor %}
             {% else %}
