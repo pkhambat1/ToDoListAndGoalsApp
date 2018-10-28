@@ -39,6 +39,7 @@ app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['SECRET_KEY'] = "1234abcd"
+app.secret_key = "1234abcd"
 Session(app)
 
 # Configure CS50 Library to use database
@@ -92,10 +93,6 @@ def login():
         # User reached route via POST (as by submitting a form via POST)
         users = db.execute("SELECT * FROM users WHERE username = :username",
                            username=request.form.get("username"))
-        print(users, "users")
-        print(len(users), "len(users)")
-        print(check_password_hash(users[0]["password"], request.form.get("password")), 'check_password_hash(users[0]["password"], request.form.get("password"))')
-
 
         # Ensure username exists and password is correct
         if len(users) != 1 or not check_password_hash(users[0]["password"], request.form.get("password")):
