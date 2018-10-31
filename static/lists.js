@@ -50,7 +50,7 @@ $(document).ready(function() {
                     } else {
                         // Empty table message
                         rawhtml +=
-                        '<tr><td colspan="4">You have no items on this list. <a href="/new_item">Add</a> some?</td></tr>';
+                        '<tr><td colspan="4">You have no items on this list. <a href="/lists/new_item">Add</a> some?</td></tr>';
                     }
                     rawhtml += '</table>';
 
@@ -93,7 +93,7 @@ $(document).ready(function() {
                 } else {
                     // Empty table message
                     rawhtml +=
-                        '<tr><td colspan="4">You have no items on this list. <a href="/new_item">Add</a> some?</td></tr>';
+                        '<tr><td colspan="4">You have no items on this list. <a href="/lists/new_item">Add</a> some?</td></tr>';
                 }
                 rawhtml += '</table>';
 
@@ -135,7 +135,7 @@ $(document).ready(function() {
                 } else {
                     // Empty table message
                     rawhtml +=
-                        '<tr><td colspan="4">You have no items on this list. <a href="/new_item">Add</a> some?</td></tr>';
+                        '<tr><td colspan="4">You have no items on this list. <a href="/lists/new_item">Add</a> some?</td></tr>';
                 }
                 rawhtml += '</table>';
 
