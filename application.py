@@ -6,7 +6,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, send_from_directory
 from flask_session import Session
 import datetime
 import re
@@ -19,11 +19,28 @@ from helpers import apology, login_required, get_datetime
 
 # Configure application
 app = Flask(__name__)
+
+# Ensure templates are auto-reloaded
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# Ensure responses aren't cached
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
+
 app.permanent_session_lifetime = datetime.timedelta(days=365)
 app.secret_key = os.getenv('SECRET_KEY', 'for dev')
 
 # Configure CS50 Library to use database
 db = SQL("postgres://dnedntjbatoqvz:2f5809d29929f230992bc3a295b31dcf2c65497274b44cc3145e4b364f6b28d0@ec2-75-101-138-26.compute-1.amazonaws.com:5432/d4obbeungvdjk8")
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico')
 
 
 @app.route("/")
@@ -369,7 +386,7 @@ def delete_list():
 @login_required
 def list_page():
     """GET: Show list names,
-       POST: show checkale list items of respective list"""
+       POST: show checkable list items of respective list"""
     if request.method == 'POST':
         list_id = request.form.getlist("check_list")
         list_id = list_id[0]

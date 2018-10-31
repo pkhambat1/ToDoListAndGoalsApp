@@ -10,7 +10,10 @@
     <script src="/static/scripts.js"></script>
     <script src="/static/todos.js"></script>
 
-    <h1 class="display-2">Welcome, {{ name }} </h1>
+    <h1 class="display-2">Welcome, {{ name }}</h1>
+    <p class="lead">
+        Here are the items on your ToDo list
+    </p>
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
@@ -52,7 +55,7 @@
                 </form>
             {% else %}
                 <tr>
-                    <td colspan="4" align="center">You have no items on your checklist</td>
+                    <td colspan="4">You have no items on your ToDo list. <a href="/new">Add</a> some?</td>
                 </tr>
             {% endif %}
         </tbody>

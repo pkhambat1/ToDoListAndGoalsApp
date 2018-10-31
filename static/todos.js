@@ -32,7 +32,7 @@ $(document).ready(function() {
                     } else {
                         // Empty table message
                         rawhtml +=
-                            '<tr><td colspan="4" align="center">You have no items on your checklist</td></tr>';
+                            '<tr><td colspan="4">You have no items on your ToDo list. <a href="/new">Add</a> some?</td></tr>';
                     }
 
                     $('#myTableId').append(rawhtml);
@@ -72,7 +72,7 @@ $(document).ready(function() {
                     } else {
                         // Empty table message
                         rawhtml +=
-                            '<tr><td colspan="4" align="center">You have no items on your checklist</td></tr>';
+                            '<tr><td colspan="4">You have no items on your ToDo list. <a href="/new">Add</a> some?</td></tr>';
                     }
 
                     $('#myTableId').append(rawhtml);
