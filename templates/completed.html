@@ -14,7 +14,6 @@
         <thead align="left" class="thead-light">
             <tr>
                 <th>Name</th>
-                <th>Details</th>
                 <th>Completed</th>
             </tr>
         </thead>
@@ -25,7 +24,6 @@
                 {% for item in completed | reverse %}
                     <tr class="strikeout">
                         <td>{{ item.name }}</td>
-                        <td>{{ item.details }}</td>
                         <td>{{ item.datetime }}</td>
                     </tr>
                 {% endfor %}
