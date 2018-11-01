@@ -23,8 +23,6 @@ $(document).ready(function() {
                                 + data[i]['id'] + '" id="' + data[i]['id'] +
                                 '" name="check_goal"></form></td>';
                             rawhtml += '<td>' + data[i]['name'] + '</td>';
-                            rawhtml += '<td>' + data[i]['details'] +
-                                '</td>';
                             rawhtml += '<td>' + data[i]['datetime'] +
                                 '</td>';
                             rawhtml += '</tr>';
@@ -65,8 +63,6 @@ $(document).ready(function() {
                                 + data[i]['id'] + '" id="' + data[i]['id'] +
                                 '" name="check_goal"></form></td>';
                             rawhtml += '<td>' + data[i]['name'] + '</td>';
-                            rawhtml += '<td>' + data[i]['details'] +
-                                '</td>';
                             rawhtml += '<td>' + data[i]['datetime'] +
                                 '</td>';
                             rawhtml += '</tr>';
