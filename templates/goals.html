@@ -18,13 +18,11 @@
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
-    <div style="float: right;">
-        <form action="/new_goal">
-            <button type="submit" id="new_reminder" class="btn btn-success btn-md center-block" Style="width: 150px; Height: 50px">New Goal</button>
-        </form>
-    </div>
-
-    <span style="display:inline-block; height: 40px;width: 100%;"></span>
+    <form action="/goals" method="post">
+        <div class="form-group">
+            <input id="goal" name="goal" autocomplete="off" autofocus class="form-control" placeholder="New Goal" type="text" Style="width: 300px;"/>
+        </div>
+    </form>
 
     <table class="table">
         <thead align="left" class="thead-light">
@@ -32,7 +30,6 @@
                 <!--status -->
                 <th class="narrow"></th>
                 <th>Name</th>
-                <th>Details</th>
                 <th>Created</th>
             </tr>
         </thead>
@@ -47,14 +44,13 @@
                                 <input type="checkbox" value="{{ goal.id }}" id="{{ goal.id }}" name="check_goal" class="check_goal">
                             </td>
                             <td>{{ goal.name }}</td>
-                            <td>{{ goal.details }}</td>
                             <td>{{ goal.datetime }}</td>
                         </tr>
                     {% endfor %}
                 </form>
             {% else %}
                 <tr>
-                    <td colspan="4">You have no items on your Goals list. <a href="/new_goal">Add</a> some?</tr>
+                    <td colspan="3">You have no items on your Goals list. <a id="link_add_goal" href="#goal">Add</a> some?</td>
                 </tr>
             {% endif %}
         </tbody>

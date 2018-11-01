@@ -17,21 +17,17 @@
 
     <span style="display:inline-block; height: 40px;width: 100%;"></span>
 
-    <div style="float: right;">
-        <form action="/new" method="get">
-            <button type="submit" id="new_reminder" class="btn btn-primary btn-md center-block" Style="width: 150px; Height: 50px;">New ToDo</button>
-        </form>
-    </div>
-
-    <span style="display:inline-block; height: 40px;width: 100%;"></span>
-
+    <form action="/" method="post">
+        <div class="form-group">
+            <input name="reminder" id="reminder" autocomplete="off" autofocus class="form-control" placeholder="New To Do" type="text" Style="width: 300px;"/>
+        </div>
+    </form>
     <table class="table">
         <thead align="left" class="thead-light">
             <tr>
                 <!--status -->
                 <th class="narrow"></th>
                 <th>Name</th>
-                <th>Details</th>
                 <th>Created</th>
             </tr>
         </thead>
@@ -48,14 +44,13 @@
                                 </div>
                             </td>
                             <td>{{ reminder.name }}</td>
-                            <td>{{ reminder.details }}</td>
                             <td>{{ reminder.datetime }}</td>
                         </tr>
                     {% endfor %}
                 </form>
             {% else %}
                 <tr>
-                    <td colspan="4">You have no items on your ToDo list. <a href="/new">Add</a> some?</td>
+                    <td colspan="3">You have no items on your ToDo list. <a id="link_add_todo" href="#reminder">Add</a> some?</td>
                 </tr>
             {% endif %}
         </tbody>

@@ -32,7 +32,7 @@ $(document).ready(function() {
                     } else {
                         // Empty table message
                         rawhtml +=
-                            '<tr><td colspan="4">You have no items on your Goals list. <a href="/new_goal">Add</a> some?</td></tr>';
+                            '<tr><td colspan="3">You have no items on your Goals list. <a id="link_add_goal" href="#goal">Add</a> some?</td></tr>';
                     }
 
                     $('#myTableId').append(rawhtml);
@@ -74,7 +74,7 @@ $(document).ready(function() {
                     } else {
                         // Empty table message
                         rawhtml +=
-                            '<tr><td colspan="4">You have no items on your Goals list. <a href="/new_goal">Add</a> some?</td></tr>';
+                            '<tr><td colspan="3">You have no items on your Goals list. <a id="link_add_goal" href="#goal">Add</a> some?</td></tr>';
                     }
 
                     $('#myTableId').append(rawhtml);
@@ -82,6 +82,13 @@ $(document).ready(function() {
             });
         }
     });
+
+    // Link to focus into new ToDo box
+    $(document).on('click', '#link_add_goal', function(e) {
+        e.preventDefault();
+        $("#goal").focus();
+    });
+
 });
 
 

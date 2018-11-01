@@ -43,31 +43,52 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico')
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    """Show reminders"""
+    """Show ToDo's"""
+    if request.method == "POST":
 
-    reminders = db.execute("SELECT * FROM reminders WHERE user_id = :user_id",
+        reminder = request.form.get("reminder")
+
+        if reminder:
+            # Insert reminder
+            db.execute("INSERT INTO reminders (name, user_id, datetime) VALUES (:reminder, :user_id, :datetime)",
+                       reminder=reminder, user_id=session["user_id"], datetime=get_datetime())
+
+        return redirect("/")
+    else:
+        reminders = db.execute("SELECT * FROM reminders WHERE user_id = :user_id",
+                               user_id=session["user_id"])
+
+        users = db.execute("SELECT * FROM users WHERE id = :user_id",
                            user_id=session["user_id"])
 
-    users = db.execute("SELECT * FROM users WHERE id = :user_id",
-                       user_id=session["user_id"])
+        firstname = users[0]["firstname"]
 
-    firstname = users[0]["firstname"]
-
-    return render_template("index.html", reminders=reminders, name=firstname)
+        return render_template("index.html", reminders=reminders, name=firstname)
 
 
-@app.route("/goals")
+@app.route("/goals", methods=["GET", "POST"])
 @login_required
 def goals():
     """Show goals"""
+    if request.method == "POST":
 
-    goals = db.execute("SELECT * FROM goals WHERE user_id = :user_id",
-                       user_id=session["user_id"])
+        goal = request.form.get("goal")
 
-    return render_template("goals.html", goals=goals)
+        if goal:
+            # Insert reminder
+            db.execute("INSERT INTO goals (name, user_id, datetime) VALUES (:goal, :user_id, :datetime)",
+                       goal=goal, user_id=session["user_id"], datetime=get_datetime())
+
+        return redirect("/goals")
+
+    else:
+        goals = db.execute("SELECT * FROM goals WHERE user_id = :user_id",
+                           user_id=session["user_id"])
+
+        return render_template("goals.html", goals=goals)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -243,49 +264,6 @@ def change():
         return render_template("change.html")
 
 
-@app.route("/new", methods=["GET", "POST"])
-@login_required
-def new():
-    """Create New Reminder"""
-    if request.method == "POST":
-
-        reminder = request.form.get("reminder")
-        details = request.form.get("details")
-
-        if not reminder:
-            return apology("Missing Reminder")
-
-        # Insert reminder
-        db.execute("INSERT INTO reminders (name, details, user_id, datetime) VALUES (:reminder, :details, :user_id, :datetime)",
-                   reminder=reminder, details=details, user_id=session["user_id"], datetime=get_datetime())
-
-        return redirect("/")
-
-    else:
-        return render_template("new.html")
-
-
-@app.route("/new_goal", methods=["GET", "POST"])
-@login_required
-def new_goal():
-    """Create New Goal"""
-    if request.method == "POST":
-
-        goal = request.form.get("goal")
-        details = request.form.get("details")
-
-        if not goal:
-            return apology("Missing Goal")
-
-        # Insert reminder
-        db.execute("INSERT INTO goals (name, details, user_id, datetime) VALUES (:goal, :details, :user_id, :datetime)",
-                   goal=goal, details=details, user_id=session["user_id"], datetime=get_datetime())
-
-        return redirect("/goals")
-
-    else:
-        return render_template("new_goal.html")
-
 
 @app.route("/completed", methods=["GET", "POST"])
 @login_required
@@ -424,8 +402,8 @@ def checked_item():
         checked_item = checked_item[0]
 
         # Insert into completed
-        db.execute("INSERT INTO completed (name, details, user_id, datetime) VALUES (:name, :details, :user_id, :datetime)",
-                   name=checked_item['name'], details=checked_item['details'], user_id=session['user_id'], datetime=get_datetime())
+        db.execute("INSERT INTO completed (name, user_id, datetime) VALUES (:name, :user_id, :datetime)",
+                   name=checked_item['name'], user_id=session['user_id'], datetime=get_datetime())
         # Delete from reminders
         db.execute("DELETE FROM items WHERE id = :item_id",
                    item_id=checked_item['id'])
@@ -451,8 +429,8 @@ def checked_goal():
         checked_goal = checked_goal[0]
 
         # Insert into completed
-        db.execute("INSERT INTO completed (name, details, user_id, datetime) VALUES (:name, :details, :user_id, :datetime)",
-                   name=checked_goal['name'], details=checked_goal['details'], user_id=session['user_id'], datetime=get_datetime())
+        db.execute("INSERT INTO completed (name, user_id, datetime) VALUES (:name, :user_id, :datetime)",
+                   name=checked_goal['name'], user_id=session['user_id'], datetime=get_datetime())
         # Delete from reminders
         db.execute("DELETE FROM goals WHERE id = :goal_id",
                    goal_id=checked_goal['id'])
@@ -481,8 +459,8 @@ def checked():
         checked_reminder = checked_reminder[0]
 
         # Insert into completed
-        db.execute("INSERT INTO completed (name, details, user_id, datetime) VALUES (:name, :details, :user_id, :datetime)",
-                   name=checked_reminder['name'], details=checked_reminder['details'], user_id=session['user_id'], datetime=get_datetime())
+        db.execute("INSERT INTO completed (name, user_id, datetime) VALUES (:name, :user_id, :datetime)",
+                   name=checked_reminder['name'], user_id=session['user_id'], datetime=get_datetime())
         # Delete from reminders
         db.execute("DELETE FROM reminders WHERE id = :reminder_id",
                    reminder_id=checked_reminder['id'])

@@ -25,14 +25,13 @@ $(document).ready(function() {
                             rawhtml += '" id="' + data[i]['id']
                             rawhtml += '" name="check_reminder"></form></td>';
                             rawhtml += '<td>' + data[i]['name'] + '</td>';
-                            rawhtml += '<td>' + data[i]['details'] + '</td>';
                             rawhtml += '<td>' + data[i]['datetime'] + '</td>';
                             rawhtml += '<tr>';
                         });
                     } else {
                         // Empty table message
                         rawhtml +=
-                            '<tr><td colspan="4">You have no items on your ToDo list. <a href="/new">Add</a> some?</td></tr>';
+                            '<tr><td colspan="3">You have no items on your ToDo list. <a id="link_add_todo" href="#reminder">Add</a> some?</td></tr>';
                     }
 
                     $('#myTableId').append(rawhtml);
@@ -65,20 +64,25 @@ $(document).ready(function() {
                             rawhtml += '" id="' + data[i]['id'];
                             rawhtml += '" name="check_reminder"></form></td>';
                             rawhtml += '<td>' + data[i]['name'] + '</td>';
-                            rawhtml += '<td>' + data[i]['details'] + '</td>';
                             rawhtml += '<td>' + data[i]['datetime'] + '</td>';
                             rawhtml += '<tr>';
                         });
                     } else {
                         // Empty table message
                         rawhtml +=
-                            '<tr><td colspan="4">You have no items on your ToDo list. <a href="/new">Add</a> some?</td></tr>';
+                            '<tr><td colspan="3">You have no items on your ToDo list. <a id="link_add_todo" href="#reminder">Add</a> some?</td></tr>';
                     }
 
                     $('#myTableId').append(rawhtml);
                 }
             });
         }
+    });
+
+    // Link to focus into new ToDo box
+    $(document).on('click', '#link_add_todo', function(e) {
+        e.preventDefault();
+        $("#reminder").focus();
     });
 
 
