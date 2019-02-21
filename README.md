@@ -8,7 +8,7 @@ The project is available to view and use on https://doneanddone.herokuapp.com.
 
 The `helpers.py` file was provided by cs50.
 
-## You can add to your ToDo list as so:
+## You can add to your ToDo list
 ![](Todos_Giphy.gif)
 
 ## ... and to your Long Terms Goals list as well
@@ -19,3 +19,5 @@ The `helpers.py` file was provided by cs50.
 
 ## Make itemized lists with checkable items
 ![](Lists_Giphy.gif)
+
+Thank you for viewing my project!
