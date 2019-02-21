@@ -8,4 +8,4 @@ The project is available to view and use on https://doneanddone.herokuapp.com.
 
 The `helpers.py` file was provided by cs50.
 
-![](todos_giphy.gif)
+![](Todos_Giphy.gif)
