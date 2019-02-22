@@ -6,7 +6,7 @@ done&done helps you stay organized with keeping maintaining your current check l
 
 The project is available to view and use on https://doneanddone.herokuapp.com.
 
-The `helpers.py` file was provided by cs50.
+DISCLAIMER: The `helpers.py` and `layout.html` files was used from a previous project and provided by cs50.
 
 ## You can add to your ToDo list
 ![](Todos_Giphy.gif)
