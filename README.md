@@ -1,4 +1,4 @@
-# A ToDo checklist app combined with a long term goals app
+# A ToDo list web app with Long Term Goals too!
 
 ## cs50-2018-x-project
 
