@@ -1,10 +1,9 @@
 # A ToDo list web app with long-term goals too!
 
-## cs50-2018-x-project
+## dona&done - A cs50-2018-x-project
 
-done&done helps you stay organized with keeping maintaining your current check list, without letting you lose focus from your long term aspirations. 
-
-The project is available to view and use on https://doneanddone.herokuapp.com.
+Link to cs50 final prompt - https://docs.cs50.net/2018/x/project/project.html
+Made as a final project for HarvardX CS50, done&done aims to help you stay organized with keeping maintaining your current check list, without letting you lose focus from your long term aspirations. 
 
 DISCLAIMER: The `helpers.py` and `layout.html` files, and `login()` and `logout()` methods of `application.py` were used from a previous project and provided by cs50 (pset 7 - Finance).
 
@@ -20,4 +19,5 @@ DISCLAIMER: The `helpers.py` and `layout.html` files, and `login()` and `logout(
 ## Make itemized lists with checkable items
 ![](Lists_Giphy.gif)
 
+The project is available to view and use on https://doneanddone.herokuapp.com.
 Thank you for viewing my project!
