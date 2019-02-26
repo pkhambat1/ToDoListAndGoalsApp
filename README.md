@@ -8,7 +8,7 @@ Made as a final project for HarvardX CS50, done&done aims to help you stay organ
 DISCLAIMER: The `helpers.py` and `layout.html` files, and `login()` and `logout()` methods of `application.py` were used from a previous project and provided by cs50 (pset 7 - Finance).
 
 ## You can add to your ToDo list
-![](Todos_Giphy.gif | width="40%")
+![](Todos_Giphy.gif width="40%")
 
 ## ... and to your Long Terms Goals list as well
 ![](Goals_Giphy.gif | width="40%)
