@@ -1,4 +1,4 @@
-# A ToDo list web app with Long Term Goals too!
+# A ToDo list web app with long-term goals too!
 
 ## cs50-2018-x-project
 
